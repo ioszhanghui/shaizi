@@ -25,11 +25,11 @@ function setSaiziScrollPoint() {
   //最左边的位置
   var minX = margin;
   //最右边的位置
-  var maxX = screenwidth - margin - commen.changeUnit(152);
+  var maxX = screenwidth - margin - 76;
   /*最小的*/
   var minY = app.globalData.nviHight + 20 + margin;
   /*最大的*/
-  var maxY = app.globalData.screenHeight - commen.changeUnit(110) - 64 - 20 - commen.changeUnit(152);
+  var maxY = app.globalData.screenHeight - 55 - 64 - 20 - 76;
   var point = {
     left: Math.ceil(commen.randomValue(minX, maxX)),
     top: Math.ceil(commen.randomValue(minY, maxY)),
@@ -45,7 +45,7 @@ function isRepeatData(point){
     var offsetLeft = Math.abs(point.left-leftPoint.left);
     var offsetTop = Math.abs(point.top-leftPoint.top);
     console.log("**********"+"offsetLeft" + offsetLeft + "offsetTop" + offsetTop);
-    if (offsetLeft < (commen.changeUnit(152) + 5) && offsetTop < commen.changeUnit(152)+5 ){
+    if (offsetLeft < (76 + 5) && offsetTop < 76+5 ){
       console.log("重点");
       repeat = true;
       break;
@@ -63,18 +63,16 @@ function addSaiziPoint(){
     while (isRepeatData(point)) {
       point = setSaiziScrollPoint();
     }
-    console.log(point.left+"top"+point.top);
     /*创建动画*/
     var animation = wx.createAnimation({
       duration: 2000,
       timingFunction: 'linear',
-      // transformOrigin:"0,0,0"
+      delay: 3000
     });
-    animation.translate(point.left, point.top).rotate(180).step();
+    animation.translate(point.left,point.top).rotate(180).step();
     point.animation = animation.export();
+    console.log("左边"+point.left+"顶部"+point.top);
     pxList.push(point);
-    // point.left = commen.changerpx(point.left);
-    // point.top = commen.changerpx(point.top);
     lists.push(point);
   }
 }
@@ -161,6 +159,10 @@ Page({
     //获取坐标点
     lists.length = 0;//清空数组
     pxList.length = 0;
+    //清除视图数据
+    this.setData({
+      lists: lists
+    });
     addSaiziPoint();
     this.setData({
       lists: lists

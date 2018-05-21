@@ -61,7 +61,9 @@ page{
   display: inline-block;
   }
   .point{
-    width: 152rpx;
-    height: 152rpx;
-    position:absolute;
+    width: 76px;
+    height: 76px;
+    position: absolute;
+    left: 0px;
+    top:0px;
   }
