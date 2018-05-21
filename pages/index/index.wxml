@@ -1,0 +1,14 @@
+<!--设置按钮-->
+<view class="set" style='background:url("http://p8x4grwe5.bkt.clouddn.com/set.png") no-repeat;background-size:cover;' bindtap='setAction'></view>
+<!--筛子个数-->
+<view class='shaiziCount'>{{count}}
+<view style='background:url("http://p8x4grwe5.bkt.clouddn.com/add.png") no-repeat;background-size:cover;' class='addBtn' bindtap='addNumber'></view>
+<view style='background:url("http://p8x4grwe5.bkt.clouddn.com/reduce.png") no-repeat;background-size:cover;' class='addBtn' class='reduceBtn' bindtap='reduceNumber'></view>
+</view>
+<view class='footer'>
+<view class='shake' style='background:url("http://p8x4grwe5.bkt.clouddn.com/shake.png") no-repeat;background-size:cover;'></view>
+<text class='shakeText'>摇一摇</text>
+</view>
+<audio id='shakeAudio'></audio>
+<!--筛子-->
+<view wx:for="{{lists}}" style='background:url({{item.imageUrl}}) no-repeat;background-size:152rpx 152rpx;left:-10px;top:-10px;' class='point' animation="{{item.animation}}" ></view>

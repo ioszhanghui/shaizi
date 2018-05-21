@@ -1,0 +1,120 @@
+
+    /********************************************弹框提示**************************************/
+    /*ActionSheet*/
+    wx.showActionSheet({
+      itemList: ["1","2","3"],
+      "itemColor":"#999",
+      success: function (tapIndex){
+        console.log(tapIndex);
+      },
+      fail:function(res){
+        console.log("错误信息"+res.errMsg);
+      }
+    })
+    itemList 弹出的文本内容
+    itemColor 文本颜色
+    success 成功回调  success返回参数说明  tapIndex	Number	用户点击的按钮，从上到下的顺序，从0开始
+    fail 失败回调
+
+    /*alertView*/
+     wx.showModal({
+      title: '提示的标题',
+      content: '提示的内容',
+      showCancel:true,
+      cancelText:"取消",
+      cancelColor:"red",
+      confirmText:"确定",
+      confirmColor:"green",
+      success: function (res){
+        if (res.confirm) {
+          console.log('用户点击确定')
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+
+title	String	是	提示的标题
+content	String	是	提示的内容
+showCancel	Boolean	否	是否显示取消按钮，默认为 true
+cancelText	String	否	取消按钮的文字，默认为"取消"，最多 4 个字符
+cancelColor	HexColor	否	取消按钮的文字颜色，默认为"#000000"
+confirmText	String	否	确定按钮的文字，默认为"确定"，最多 4 个字符
+confirmColor	HexColor	否	确定按钮的文字颜色，默认为"#3CC51F"
+success	Function	否	接口调用成功的回调函数
+fail	Function	否	接口调用失败的回调函数
+complete	Function	否	接口调用结束的回调函数（调用成功、失败都会执行）
+
+/*MBProgressHUD*/
+    wx.showToast({
+      title: '提示的内容',
+      icon:"loading",
+      "duration":3000,
+      mask:true,
+      success:function(res){
+        console.log("弹出成功");
+      }
+    })
+
+title	String	是	提示的内容	
+icon	String	否	图标，有效值 "success", "loading", "none"	
+image	String	否	自定义图标的本地路径，image 的优先级高于 icon
+duration	Number	否	提示的延迟时间，单位毫秒，默认：1500	
+mask	Boolean	否	是否显示透明蒙层，防止触摸穿透，默认：false	
+success	Function	否	接口调用成功的回调函数
+
+
+/*MBProgressHUD 添加提示框*/
+    wx.showLoading({
+      title: '提示的内容',
+      mask:true,
+      success:function(res){
+        console.log("显示成功");
+      }
+    })
+
+/*MBProgressHUD 移除提示框*/
+    wx.hideLoading();
+
+  /********************************************动画**************************************/
+
+
+初始化GlobalData
+在App.js的最上方可以设置GlobalData的初始值。
+
+App({  
+  globalData:{  
+    appid: '1wqas2342dasaqwe232342xxxxxxxxxx',//appid需自己提供，此处的appid我随机编写    
+    secret: 'e0dassdadef2424234209bwXXXXXXXXXXXXXX',//secret需自己提供，此处的secret我随机编写   
+    openid:'你好', //自定义  
+  },  
+
+
+  在App.js中修改GlobalData的值
+比如，获得UserInfo后将openid的值赋值给GlobalData中的openid，可以这样写：
+
+this.globalData.openid = e.detail.openid;  
+
+this代表的是当前文件。
+在小程序的页面中调用和写入GlobalData
+
+var app = getApp();
+
+var getAppInfo = app.globalData.openid;  
+console.log(getAppInfo)  
+
+在页面中设置openid：
+getApp().globalData.openid = "12345";
+
+//动态样式  
+<view style="color:{{color}};" />  
+style="width:{{imageWidth}}rpx;height:{{imageHeight}}rpx";  
+//静态样式  
+style="color: #1083E5;font-size: 48rpx;font-weight:bold;" 
+
+/*数组清空处理*/
+   // lists = [];
+    // pxList = [];
+    lists.splice(0,lists.length);
+    pxList.splice(0, pxList.length);
+
