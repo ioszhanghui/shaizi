@@ -11,4 +11,7 @@
 </view>
 <audio id='shakeAudio'></audio>
 <!--筛子-->
-<view wx:for="{{lists}}" style='background:url({{item.imageUrl}}) no-repeat;background-size:76px 76px;' class='point' animation="{{item.animation}}" ></view>
+<!-- <block wx:for="{{lists}}">
+<view style='background:url({{item.imageUrl}}) no-repeat;background-size:76px 76px;' class='point' animation="{{item.animation}}" ></view>
+</block> -->
+<view wx:for="{{indexs}}" wx:if="{{index<count}}" style='background:url({{lists[index].imageUrl}}) no-repeat;background-size:76px 76px;left:-76px;top:-76px;' class='point' animation="{{lists[index].animation}}" ></view>

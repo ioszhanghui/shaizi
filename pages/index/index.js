@@ -17,7 +17,8 @@ Page({
       "http://p8x4grwe5.bkt.clouddn.com/SZ_05@2x.png",
       "http://p8x4grwe5.bkt.clouddn.com/SZ_06@2x.png"
     ],
-    pxList:[]
+    pxList:[],
+    indexs:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   },
   onReady:function(){
     //创建音频加载对象
@@ -53,6 +54,7 @@ Page({
       left: Math.ceil(commen.randomValue(minX, maxX)),
       top: Math.ceil(commen.randomValue(minY, maxY)),
       imageUrl: this.data.saizi[Math.round(Math.random() * 5)],
+      animation:{}
     };
     return point;
   },
@@ -83,10 +85,9 @@ return repeat;
   /*创建动画*/
   var animation = wx.createAnimation({
     duration: 2000,
-    timingFunction: 'linear',
-    delay: 3000
+    timingFunction: 'linear'
   });
-  animation.translate(point.left, point.top).step().rotate(180).step();
+  animation.translate(point.left+76, point.top+76).rotate(180).step();
   point.animation = animation.export();
   console.log("左边" + point.left + "顶部" + point.top);
   this.data.pxList.push(point);
@@ -107,11 +108,11 @@ return repeat;
         this.audioObj.setSrc('http://p8x4grwe5.bkt.clouddn.com/shake.mp3');
         this.audioObj.play();
         //获取坐标点
-        lists.length = 0;//清空数组
-        pxList.length = 0;
+        this.data.lists.length = 0;//清空数组
+        this.data.pxList.length = 0;
         addSaiziPoint();
         that.setData({
-          lists: this.data
+          lists: []
         });
       }
 
@@ -150,8 +151,10 @@ return repeat;
       lists:[],
       pxList:[]
     });
+    console.log(this.data.lists);
     this.addSaiziPoint();
     var that = this;
+    
     this.setData({
       lists: this.data.lists
     });

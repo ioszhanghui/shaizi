@@ -64,6 +64,6 @@ page{
     width: 76px;
     height: 76px;
     position: absolute;
-    left: 0px;
-    top:0px;
+    left: -76px;
+    top:-76px;
   }
