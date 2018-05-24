@@ -18,7 +18,8 @@ Page({
       "http://p8x4grwe5.bkt.clouddn.com/SZ_06@2x.png"
     ],
     pxList:[],
-    indexs:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    indexs:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    resetList:[]//点击之后所有的都重置回去
   },
   onReady:function(){
     //创建音频加载对象
@@ -87,7 +88,12 @@ return repeat;
     duration: 2000,
     timingFunction: 'linear'
   });
-  animation.translate(point.left+76, point.top+76).rotate(180).step();
+  animation.translate(point.left+76, point.top+76).rotate(180).step({
+    delay:500
+  }).rotate(0).step({
+    duration:0,
+    timingFunction: 'linear'
+  });
   point.animation = animation.export();
   console.log("左边" + point.left + "顶部" + point.top);
   this.data.pxList.push(point);
@@ -115,7 +121,6 @@ return repeat;
           lists: []
         });
       }
-
     })
   },
   /*增加筛子的个数*/
@@ -136,6 +141,55 @@ return repeat;
       count: --this.data.count
     });
   },
+  /*把所有的数据 都重置了*/
+  resetTranslate:function(){
+    for(var i=0;i<this.data.lists.length;i++){
+      //取出所有的数据 都让它回到原点
+      var obj =this.data.lists[i];
+      var ani= wx.createAnimation({
+        duration:0,
+        timingFunction:"linear"
+      })
+      ani.translate(-obj.left,-obj.top).step();
+      obj.animation =ani.export();
+    }
+  //重置一下 返回原点
+    this.setData({
+      lists:this.data.lists
+    })
+  },
+
+  /*生成二维码*/
+  codegenerate:function(){
+    console.log("分享");
+    wx.request({
+      url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx2122b9c74dd3b917&secret=cdfc9a6bc5d101873b5499f37c88c1dd',
+      data: {},
+      method: "GET",
+      header: {
+        "content-type": "application/json"
+      },
+      success: function (res) {
+        console.log(res.data.access_token + "token");
+
+        wx.request({
+          url: 'https://api.weixin.qq.com/wxa/getwxacode?access_token=' + res.data.access_token,
+          method: "POST",
+          data: {
+            width: 300,
+            path: "pages/index?query=1"
+          },
+          header: {
+            "content-type": "application/json"
+          },
+          success: function (res) {
+            console.log(res + "二维码信息");
+          }
+        })
+
+      }
+    })
+  },
   /*设置*/
   setAction:function(){ 
     //创建音频加载对象
@@ -143,20 +197,20 @@ return repeat;
     this.audioObj.setSrc('http://p8x4grwe5.bkt.clouddn.com/button.mp3');
     this.audioObj.play();
 
+    if(this.data.lists.length>0){
+      this.resetTranslate();
+    }
     //获取坐标点
     this.data.lists.length = 0;//清空数组
     this.data.pxList.length = 0;
     //清除视图数据
-    this.setData({
-      lists:[],
-      pxList:[]
-    });
     console.log(this.data.lists);
-    this.addSaiziPoint();
     var that = this;
-    
-    this.setData({
-      lists: this.data.lists
-    });
+    setTimeout(function(){
+      that.addSaiziPoint();
+      that.setData({
+        lists: that.data.lists
+      });
+    },50);
  }
 })
