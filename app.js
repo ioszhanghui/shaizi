@@ -33,18 +33,6 @@ App({
       }
     })
   },
-
-  // onShow:function(){
-  //   /*获取系统的屏宽屏高*/
-  //   wx.getSystemInfo({
-  //     success: function (res) {
-  //       /*保存屏幕的宽高信息*/
-  //       // this.globalData.screenWidth = 375;
-  //       console.log(res.screenHeight);
-  //       this.globalData.screenHeights = res.screenHeight;
-  //     },
-  //   })
-  // },
   globalData: {
     userInfo: null,
     screenWidth: 0,

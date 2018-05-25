@@ -19,13 +19,20 @@ Page({
     ],
     pxList:[],
     indexs:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    resetList:[]//点击之后所有的都重置回去
+    resetList:[],//点击之后所有的都重置回去
+    flag:false,
+    screenHight:0,
+    imageSize:17,
+    selectImage:"http://p8x4grwe5.bkt.clouddn.com/select@3x.png",
+    selectSoundHidden:true,
+    selectShakeHidden:true
   },
   onReady:function(){
     //创建音频加载对象
     this.audioObj = wx.createAudioContext("shakeAudio", this);
     this.audioObj.setSrc('../../Resource/shake.mp3');
 
+  var that = this;
     /*获取系统的屏宽屏高*/
     wx.getSystemInfo({
       success: function (res) {
@@ -33,6 +40,9 @@ Page({
         app.globalData.screenWidth = res.screenWidth;
         app.globalData.screenHeight = res.screenHeight;
         app.globalData.nviHight = res.statusBarHeight+44;
+        that.setData({
+          screenHight: res.screenHeight
+        })
       },
     })
 
@@ -105,23 +115,45 @@ return repeat;
    */
   onShow: function () {
     /*加速剂摇晃事件*/
-    var that =this;/***???????*/
+    var that = this;
     wx.onAccelerometerChange(function(res){
       if(res.x>0.3&&res.y>0.3){
         console.log("加速计摇晃");
         //创建音频加载对象
-        this.audioObj = wx.createAudioContext("shakeAudio", this);
-        this.audioObj.setSrc('http://p8x4grwe5.bkt.clouddn.com/shake.mp3');
-        this.audioObj.play();
+        console.log(this.data.selectSoundHidden + "塞子");
+        if (this.data.selectSoundHidden){
+          this.audioObj = wx.createAudioContext("shakeAudio", this);
+          this.audioObj.setSrc('http://p8x4grwe5.bkt.clouddn.com/shake.mp3');
+          this.audioObj.play();
+        }
+
+        //获取坐标点
+        if (this.data.lists.length > 0) {
+          this.resetTranslate();
+        }
         //获取坐标点
         this.data.lists.length = 0;//清空数组
         this.data.pxList.length = 0;
-        addSaiziPoint();
-        that.setData({
-          lists: []
-        });
+        //清除视图数据
+        setTimeout(function () {
+          this.addSaiziPoint();
+          this.setData({
+            lists: this.data.lists
+          });
+        }, 50);
       }
     })
+  },
+  /*点击关闭*/
+  closeAction:function(){
+    /*关闭弹窗*/
+    this.setData({
+      flag:!this.data.flag
+    });
+  },
+  /*点击勾选不勾选*/
+  gouSelect:function(){
+
   },
   /*增加筛子的个数*/
   addNumber:function(){
@@ -197,20 +229,20 @@ return repeat;
     this.audioObj.setSrc('http://p8x4grwe5.bkt.clouddn.com/button.mp3');
     this.audioObj.play();
 
-    if(this.data.lists.length>0){
-      this.resetTranslate();
-    }
-    //获取坐标点
-    this.data.lists.length = 0;//清空数组
-    this.data.pxList.length = 0;
-    //清除视图数据
-    console.log(this.data.lists);
-    var that = this;
-    setTimeout(function(){
-      that.addSaiziPoint();
-      that.setData({
-        lists: that.data.lists
-      });
-    },50);
- }
+  /*打开弹窗*/
+  this.setData({
+    flag:!this.data.flag
+  })
+ },
+ /*取消音效*/
+  quxiaoSound:function(){
+    this.setData({
+      selectSoundHidden:!this.data.selectSoundHidden
+    })
+  },
+  quxiaoShake: function () {
+    this.setData({
+      selectShakeHidden: !this.data.selectShakeHidden
+    })
+  }
 })

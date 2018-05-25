@@ -15,3 +15,21 @@
 <view style='background:url({{item.imageUrl}}) no-repeat;background-size:76px 76px;' class='point' animation="{{item.animation}}" ></view>
 </block> -->
 <view wx:for="{{indexs}}" wx:if="{{index<count}}" style='background:url({{lists[index].imageUrl}}) no-repeat;background-size:76px 76px;' class='point' animation="{{lists[index].animation}}" ></view>
+
+<view class='alertBody' wx:if="{{flag}}" style='height:"{{screenHight}}px"'>
+  <view class='alertView' style='background:url(http://p8x4grwe5.bkt.clouddn.com/bg@3x.png) no-repeat; background-size:cover;'>
+  <view style='background:url(http://p8x4grwe5.bkt.clouddn.com/close@3x.png) no-repeat;background-size:38px 38px;' class="close" bindtap='closeAction'> </view>
+  <view class='textContain'>
+  <view  class='row_contain'>
+        <text class='text sound'>音效</text>
+        <view style='background:url(http://p8x4grwe5.bkt.clouddn.com/area@3x.png) no-repeat;background-size:17px 17px;' class='gou' bindtap='gouSelect' bindtap='quxiaoSound'></view>
+         <view style='background:url({{selectImage}}) no-repeat;background-size:27px 27px;' class='shakeImage' wx:if="{{selectSoundHidden}}" bindtap='quxiaoSound'></view>
+  </view>
+  <view class='row_contain'>
+        <text class='text'>摇一摇</text>
+        <view style='background:url(http://p8x4grwe5.bkt.clouddn.com/area@3x.png) no-repeat;background-size:17px 17px;' class='gou shakeGou' bindtap='quxiaoShake'> </view>
+        <view style='background:url({{selectImage}}) no-repeat;background-size:27px 27px;' class='shakeImage' wx:if="{{selectShakeHidden}}" bindtap='quxiaoShake'></view>
+  </view>
+  </view>
+  </view>
+</view>
