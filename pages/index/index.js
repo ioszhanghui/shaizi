@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    count:1,
+    count:5,
     lists: [],
     saizi:["http://p8x4grwe5.bkt.clouddn.com/SZ_01@2x.png",
       "http://p8x4grwe5.bkt.clouddn.com/SZ_02@2x.png",
@@ -17,7 +17,6 @@ Page({
       "http://p8x4grwe5.bkt.clouddn.com/SZ_05@2x.png",
       "http://p8x4grwe5.bkt.clouddn.com/SZ_06@2x.png"
     ],
-    pxList:[],
     indexs:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     resetList:[],//点击之后所有的都重置回去
     flag:false,
@@ -39,7 +38,9 @@ Page({
         /*保存屏幕的宽高信息*/
         app.globalData.screenWidth = res.screenWidth;
         app.globalData.screenHeight = res.screenHeight;
-        app.globalData.nviHight = res.statusBarHeight+44;
+        app.globalData.nviHight = res.screenHeight - res.windowHeight;
+        console.log(res.statusBarHeight+"状态栏的高度");
+        console.log("屏宽" + app.globalData.screenWidth + "高" + app.globalData.screenHeight + "导航调" + app.globalData.nviHight);
         that.setData({
           screenHight: res.screenHeight
         })
@@ -72,8 +73,8 @@ Page({
   /*查询数据是否重复*/
   isRepeatData:function(point){
     var repeat = false;
-    for (var i = 0; i < this.data.pxList.length;i++){
-      var leftPoint = this.data.pxList[i];
+    for (var i = 0; i < this.data.lists.length;i++){
+      var leftPoint = this.data.lists[i];
     var offsetLeft = Math.abs(point.left - leftPoint.left);
     var offsetTop = Math.abs(point.top - leftPoint.top);
     if (offsetLeft < (76 + 5) && offsetTop < 76 + 5) {
@@ -106,7 +107,6 @@ return repeat;
   });
   point.animation = animation.export();
   console.log("左边" + point.left + "顶部" + point.top);
-  this.data.pxList.push(point);
   this.data.lists.push(point);
 }
 },
@@ -116,29 +116,29 @@ return repeat;
   onShow: function () {
     /*加速剂摇晃事件*/
     var that = this;
+    console.log(that+"");
     wx.onAccelerometerChange(function(res){
       if(res.x>0.3&&res.y>0.3){
         console.log("加速计摇晃");
         //创建音频加载对象
-        console.log(this.data.selectSoundHidden + "塞子");
-        if (this.data.selectSoundHidden){
+        console.log(that.data.selectSoundHidden + "塞子");
+        if (that.data.selectSoundHidden){
           this.audioObj = wx.createAudioContext("shakeAudio", this);
           this.audioObj.setSrc('http://p8x4grwe5.bkt.clouddn.com/shake.mp3');
           this.audioObj.play();
         }
 
         //获取坐标点
-        if (this.data.lists.length > 0) {
-          this.resetTranslate();
+        if (that.data.lists.length>0) {
+          that.resetTranslate();
         }
         //获取坐标点
-        this.data.lists.length = 0;//清空数组
-        this.data.pxList.length = 0;
+        that.data.lists.length = 0;//清空数组
         //清除视图数据
         setTimeout(function () {
-          this.addSaiziPoint();
-          this.setData({
-            lists: this.data.lists
+          that.addSaiziPoint();
+          that.setData({
+            lists: that.data.lists
           });
         }, 50);
       }
@@ -160,8 +160,15 @@ return repeat;
     if (this.data.count>=10){
       return;//最多10个
     }
+    //获取坐标点
+    if (this.data.lists.length > 0) {
+      this.resetTranslate();
+    }
+    //获取坐标点
+    this.data.lists.length = 0;//清空数组
     this.setData({
-      count: ++this.data.count
+      count: ++this.data.count,
+      lists: this.data.lists
     });
   },
   /*减少筛子的个数*/
@@ -169,8 +176,16 @@ return repeat;
     if (this.data.count<=1){
       return;//最少一个
     }
+    //获取坐标点
+    if (this.data.lists.length > 0) {
+      this.resetTranslate();
+    }
+    //获取坐标点
+    this.data.lists.length = 0;//清空数组
+
     this.setData({
-      count: --this.data.count
+      count: --this.data.count,
+      lists: this.data.lists
     });
   },
   /*把所有的数据 都重置了*/
@@ -190,45 +205,12 @@ return repeat;
       lists:this.data.lists
     })
   },
-
-  /*生成二维码*/
-  codegenerate:function(){
-    console.log("分享");
-    wx.request({
-      url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx2122b9c74dd3b917&secret=cdfc9a6bc5d101873b5499f37c88c1dd',
-      data: {},
-      method: "GET",
-      header: {
-        "content-type": "application/json"
-      },
-      success: function (res) {
-        console.log(res.data.access_token + "token");
-
-        wx.request({
-          url: 'https://api.weixin.qq.com/wxa/getwxacode?access_token=' + res.data.access_token,
-          method: "POST",
-          data: {
-            width: 300,
-            path: "pages/index?query=1"
-          },
-          header: {
-            "content-type": "application/json"
-          },
-          success: function (res) {
-            console.log(res + "二维码信息");
-          }
-        })
-
-      }
-    })
-  },
   /*设置*/
   setAction:function(){ 
     //创建音频加载对象
     this.audioObj = wx.createAudioContext("shakeAudio", this);
     this.audioObj.setSrc('http://p8x4grwe5.bkt.clouddn.com/button.mp3');
     this.audioObj.play();
-
   /*打开弹窗*/
   this.setData({
     flag:!this.data.flag

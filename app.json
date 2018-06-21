@@ -1,12 +1,11 @@
 {
   "pages":[
-    "pages/index/index",
-    "pages/logs/logs"
+    "pages/index/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor":"#188124",
-    "navigationBarTitleText": "欢乐摇筛子",
+    "navigationBarTitleText": "欢乐骰子多",
     "navigationBarTextStyle":"white"
   }
 }
